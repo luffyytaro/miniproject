@@ -24,7 +24,7 @@ const schema = new Schema({
         unique: false
     },
     phone:{
-        type:String,
+        type:Number,
         required:false,
         unique:true
     }

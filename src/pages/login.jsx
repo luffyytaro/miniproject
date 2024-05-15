@@ -1,57 +1,81 @@
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../components/input";
-import { useFormik } from "formik";
-import validate from "../validation/login";
-import toast from "react-hot-toast";
-import axios from "axios";
-import Button from "../components/button";
+import { useEffect } from "react";
 
-export default function Login(){
 
-    const navigate= useNavigate();
-    const formik = useFormik({
-        initialValues:{
-            username:"",
-            password:""
-        },
-        validate: validate,
-        validateOnBlur: false,
-        validateOnChange:false,
-        onSubmit:(values) =>{
-            console.log(values);
-            let res = axios.post("/api/login", values);
-            toast.promise(res,{
-                loading:"Logging in...",
-                success:(res)=>{
-                    console.log(res);
-                    localStorage.setItem("token", res.data.token);
-                    navigate("/", { replace: true});
-                    return "Login successful";
-                },
-                error: "Login failed!"
-            })
-        }
-    })
+export default function Login() {
 
-    return(
-        <main className="size-full bg-gradient-to-b from-blue-400 to-green-400  flex items-center justify-center">
-            <section className="max-h-[30rem] h-full max-w-[25rem] w-full bg-white shadow-lg">
-                <h2 className="text-center p-8 text-2xl font-bold">Login to Adhigram</h2>
-                <form onSubmit={formik.handleSubmit} className="flex items-center justify-center flex-col gap-2 w-full">
-                    <Input type="text" placeholder="username" {...formik.getFieldProps("username")}/>
-                    <article className="text-red-600 text-lg">
-                        {formik.errors.username}
-                    </article>
-                    <Input type="password" placeholder="password" {...formik.getFieldProps("password")}/>
-                    <article className="text-red-600 text-lg">
-                        {formik.errors.password}
-                    </article>
-                   <Button type="submit">Login</Button>
-                   <div className="w-5/6 h-0.5 bg-black"></div>
-                   <article>Do not have an account?<Link to={"/register"}>Signup</Link></article>
-                </form>
-            </section>
+    useEffect(() => {
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
 
-        </main>
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+    }, [])
+
+    return (
+        <>
+
+            <h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
+            <div className="container" id="container">
+                <div className="form-container sign-up-container">
+                    <form action="#">
+                        <h1>Create Account</h1>
+                        <div className="social-container">
+                            <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
+                            <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
+                            <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+                        </div>
+                        <span>or use your email for registration</span>
+                        <input type="text" placeholder="Name" />
+                        <input type="email" placeholder="Email" />
+                        <input type="password" placeholder="Password" />
+                        <button>Sign Up</button>
+                    </form>
+                </div>
+                <div className="form-container sign-in-container">
+                    <form action="#">
+                        <h1>Sign in</h1>
+                        <div className="social-container">
+                            <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
+                            <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
+                            <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+                        </div>
+                        <span>or use your account</span>
+                        <input type="email" placeholder="Email" />
+                        <input type="password" placeholder="Password" />
+                        <a href="#">Forgot your password?</a>
+                        <button>Sign In</button>
+                    </form>
+                </div>
+                <div className="overlay-container">
+                    <div className="overlay">
+                        <div className="overlay-panel overlay-left">
+                            <h1>Welcome Back!</h1>
+                            <p>To keep connected with us please login with your personal info</p>
+                            <button className="ghost" id="signIn">Sign In</button>
+                        </div>
+                        <div className="overlay-panel overlay-right">
+                            <h1>Hello, Friend!</h1>
+                            <p>Enter your personal details and start journey with us</p>
+                            <button className="ghost" id="signUp">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <p>
+                    Created with <i className="fa fa-heart"></i> by
+                    <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+                    - Read how I created this and how you can join the challenge
+                    <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+                </p>
+            </footer>
+        </>
     );
 }
